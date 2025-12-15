@@ -1,4 +1,4 @@
-# 🏡 Airbnb Clone – Backend
+# 🏡 Airbnb Clone
 
 A scalable backend system inspired by Airbnb, built using **Spring Boot**, **JPA/Hibernate**, and **PostgreSQL**.  
 This project focuses on clean domain modeling, data integrity, and reliable booking workflows, reflecting how real-world hospitality platforms are designed.
