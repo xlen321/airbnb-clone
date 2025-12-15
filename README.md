@@ -119,7 +119,7 @@ Once the backend stabilizes, a frontend (web or mobile) will be introduced to co
     cd airbnb-backend
     mvn spring-boot:run
 
-Database configuration can be updated in `application.yml`.
+Database configuration can be updated in `application.properties`.
 
 ---
 
