@@ -1,11 +1,11 @@
 # 🏡 Airbnb Clone
 
 A scalable backend system inspired by Airbnb, built using **Spring Boot**, **JPA/Hibernate**, and **PostgreSQL**.  
-This project focuses on clean domain modeling, data integrity, and reliable booking workflows, reflecting how real-world hospitality platforms are designed.
+This project focuses on clean domain modeling, explicit lifecycle management, and reliable booking foundations, reflecting how real-world hospitality platforms are designed.
 
 The backend is being built incrementally with an emphasis on:
 - correctness over shortcuts
-- explicit modeling of availability and inventory
+- clear separation of lifecycle and availability
 - long-term maintainability and extensibility
 
 ---
@@ -15,9 +15,10 @@ The backend is being built incrementally with an emphasis on:
 The goal of this project is to model the core backend foundations of a short-term rental platform, including:
 
 - Property listings and metadata
+- Room-based inventory units
 - Reusable amenities and media assets
 - Date-based availability and pricing
-- A concurrency-safe booking foundation
+- Clear lifecycle control of listings and rooms
 
 Design decisions prioritize clarity, consistency, and real-world constraints over minimal implementations.
 
@@ -26,19 +27,20 @@ Design decisions prioritize clarity, consistency, and real-world constraints ove
 ## ✨ Key Capabilities
 
 - 🏨 Property (Hotel) management  
+- 🛏 Room-based inventory modeling  
 - 📍 Embedded address, location, and contact information  
 - 🏷 Reusable amenity catalog  
-- 🖼 Listing-level photo management  
-- 📅 Per-day availability and dynamic pricing  
-- 🔒 Transaction-safe booking groundwork  
+- 🖼 Listing- and room-level photo management  
+- 📅 Per-day availability with date-specific pricing  
+- 🔁 Explicit lifecycle control using `isActive` flags  
 
 ---
 
 ## 🧠 Design Principles
 
 - Normalize transactional data to ensure correctness  
+- Separate **lifecycle state** from **availability state**  
 - Embed value objects to reduce unnecessary joins  
-- Separate lifecycle concerns (listing, inventory, media)  
 - Model availability explicitly to prevent double bookings  
 - Favor extensibility over premature optimization  
 
@@ -46,7 +48,7 @@ Design decisions prioritize clarity, consistency, and real-world constraints ove
 
 ## 🛠 Technology Stack
 
-- Java 17  
+- Java 25  
 - Spring Boot  
 - Spring Data JPA (Hibernate)  
 - PostgreSQL  
@@ -60,20 +62,43 @@ Design decisions prioritize clarity, consistency, and real-world constraints ove
      ├── models          # Domain & JPA entities
      ├── repositories    # Persistence layer
      ├── services        # Business logic
-     ├── controllers     # REST APIs
-     └── config          # Application configuration
+     └── controllers     # REST APIs
 
 ---
 
-## 🔁 Booking Model Overview
+## 🔁 Lifecycle vs Availability
 
-Availability is modeled per property per date rather than as date ranges.
+A clear distinction is maintained between **entity lifecycle** and **booking availability**.
 
-This enables:
+### Lifecycle (`isActive`)
+- Controls whether an entity participates in the system
+- Applies at a coarse-grained level
+
+Examples:
+- `Hotel.isActive = false` → listing is hidden and not bookable
+- `Room.isActive = false` → room is removed from usable inventory
+
+### Availability (date-based)
+- Controls whether a listing or room can be booked on a specific date
+- Managed through per-day availability records
+
+Availability does not deactivate entities, and lifecycle flags do not represent bookings.
+
+---
+
+## 📅 Availability Model Overview
+
+Availability is modeled **per date**, rather than as date ranges.
+
+Each availability record answers:
+- Can this be booked on this date?
+- At what price?
+- Is it explicitly blocked?
+
+This design supports:
 - Prevention of double bookings
-- Safe handling of concurrent requests
-- Dynamic, per-day pricing
-- Host-controlled blocked dates
+- Date-specific pricing (including seasonal variation)
+- Safe concurrent access
 
 The availability calendar acts as the single source of truth for bookings.
 
@@ -83,7 +108,6 @@ The availability calendar acts as the single source of truth for bookings.
 
 Planned additions include:
 
-- Room-level inventory modeling  
 - Booking and payment workflows  
 - Cancellation policies  
 - Redis-based caching  
@@ -98,8 +122,8 @@ A frontend application will be added in a later phase of this project.
 
 The current focus is on building a robust and well-structured backend, ensuring:
 - correct domain modeling
+- explicit lifecycle management
 - stable availability and booking foundations
-- scalable data access patterns
 
 Once the backend stabilizes, a frontend (web or mobile) will be introduced to consume the APIs.
 
