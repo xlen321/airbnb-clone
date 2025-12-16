@@ -1,4 +1,4 @@
-package com.example.airbnb.models;
+package com.example.airbnb.models.hotel;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +9,8 @@ import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.example.airbnb.models.amenity.Amenity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

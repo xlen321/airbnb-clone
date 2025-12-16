@@ -1,4 +1,4 @@
-package com.example.airbnb.models;
+package com.example.airbnb.models.hotel;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

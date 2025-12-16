@@ -1,4 +1,4 @@
-package com.example.airbnb.models;
+package com.example.airbnb.models.amenity;
 
 import java.time.LocalDateTime;
 

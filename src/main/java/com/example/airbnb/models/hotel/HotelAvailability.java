@@ -1,4 +1,4 @@
-package com.example.airbnb.models;
+package com.example.airbnb.models.hotel;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
