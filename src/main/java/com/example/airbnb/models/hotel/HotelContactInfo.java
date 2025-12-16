@@ -9,7 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HotelContactInfo {
-    /* ---------- Address ---------- */
     @Column(name = "address_line_1")
     private String addressLine1;
 
@@ -21,11 +20,9 @@ public class HotelContactInfo {
     private String country;
     private String zipCode;
 
-    /* ---------- Geo Location ---------- */
     private Double latitude;
     private Double longitude;
 
-    /* ---------- Contact ---------- */
     private String phone;
     private String email;
 }

@@ -1,4 +1,4 @@
-package com.example.airbnb.models.hotel;
+package com.example.airbnb.models.room;
 
 import java.time.LocalDateTime;
 
@@ -20,22 +20,19 @@ import lombok.Setter;
 
 @Entity
 @Table(
-    name = "hotel_photos",
+    name = "room_photos",
     indexes = {
-        @Index(name = "idx_hotel_photos_)hotel", columnList = "hotel_id")
-    })
+        @Index(name = "idx_room_photos_room", columnList = "room_id")
+    }
+)
 @Getter
 @Setter
-public class HotelPhoto {
+public class RoomPhoto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(
-        name = "photo_url", 
-        nullable = false, 
-        columnDefinition = "TEXT"
-    )
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String photoUrl;
 
     @Column(name = "display_order")
@@ -43,11 +40,11 @@ public class HotelPhoto {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "hotel_id",
+        name = "room_id",
         nullable = false,
-        foreignKey = @ForeignKey(name = "fk_hotel_photo_hotel")
+        foreignKey = @ForeignKey(name = "fk_room_photo_room")
     )
-    private Hotel hotel;
+    private Room room;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp

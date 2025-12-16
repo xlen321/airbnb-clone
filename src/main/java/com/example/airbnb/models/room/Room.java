@@ -1,69 +1,74 @@
-package com.example.airbnb.models.hotel;
+package com.example.airbnb.models.room;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.example.airbnb.models.amenity.Amenity;
+import com.example.airbnb.models.hotel.Hotel;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "hotels")
+@Table(name = "rooms")
 @Getter
 @Setter
-public class Hotel {
+public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "room_type", nullable = false)
+    private RoomType roomType;
 
     @Column(nullable = false)
     private Boolean isActive = true;
 
-    @OneToMany(
-        mappedBy = "hotel", 
-        cascade = CascadeType.ALL, 
-        orphanRemoval = true)
-    private List<HotelPhoto> photos = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+        name = "hotel_id", 
+        nullable = false,
+        foreignKey = @ForeignKey(name = "fk_room_hotel")
+    )
+    private Hotel hotel;
 
-    @ManyToMany
-    @JoinTable(
-        name = "hotel_amenities", 
-        joinColumns = @JoinColumn(name = "hotel_id"), 
-        inverseJoinColumns = @JoinColumn(name = "amenity_id"))
-    private Set<Amenity> amenities = new HashSet<>();
+    @OneToMany(
+        mappedBy = "room", 
+        cascade = CascadeType.ALL, 
+        orphanRemoval = true
+    )
+    private List<RoomPhoto> photos = new ArrayList<>();
 
     @Column(name = "availability")
     @OneToMany(
-        mappedBy = "hotel", 
+        mappedBy = "room", 
         cascade = CascadeType.ALL, 
-        orphanRemoval = true)
-    private List<HotelAvailability> hotelAvailability = new ArrayList<>();
+        orphanRemoval = false
+    )
+    private List<RoomAvailability> roomAvailability = new ArrayList<>();
 
-    @Embedded
-    private HotelContactInfo contactInfo;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal basePrice;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
