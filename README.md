@@ -104,6 +104,32 @@ The availability calendar acts as the single source of truth for bookings.
 
 ---
 
+## 📊 Project Progress
+
+### ✅ Completed
+- Core domain modeling (Hotel, Room, User, Amenity)
+- Room-based inventory design
+- Explicit lifecycle handling using `isActive`
+- Per-day availability schema with pricing
+- Separation of lifecycle vs availability concerns
+- User roles and authentication-ready user model
+- Booking foundation (unit-based booking model)
+
+### 🚧 In Progress
+- Booking workflows and transactional consistency
+- Availability locking strategy
+- Booking status lifecycle (confirm / cancel)
+
+### 🗺 Planned
+- Payment integration
+- Cancellation and refund rules
+- Redis-based caching for availability
+- ElasticSearch-powered search
+- Event-driven booking flow
+- Frontend integration
+
+---
+
 ## 🚧 Roadmap
 
 Planned additions include:
@@ -133,7 +159,7 @@ Once the backend stabilizes, a frontend (web or mobile) will be introduced to co
 
 ### Prerequisites
 
-- Java 17 or higher  
+- Java 25  
 - Maven  
 - PostgreSQL  
 
