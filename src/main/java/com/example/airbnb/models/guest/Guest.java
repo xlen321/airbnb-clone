@@ -1,11 +1,15 @@
-package com.example.airbnb.models.hotel;
+package com.example.airbnb.models.guest;
 
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.example.airbnb.models.booking.Booking;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
@@ -20,36 +24,40 @@ import lombok.Setter;
 
 @Entity
 @Table(
-    name = "hotel_photos",
+    name = "guests",
     indexes = {
-        @Index(name = "idx_hotel_photos_hotel", columnList = "hotel_id")
-    })
+        @Index(name = "idx_guests_booking", columnList = "booking_id")
+    }
+)
 @Getter
 @Setter
-public class HotelPhoto {
+public class Guest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(
-        name = "photo_url", 
-        nullable = false, 
-        columnDefinition = "TEXT"
-    )
-    private String photoUrl;
-
-    @Column(name = "display_order")
-    private Integer displayOrder;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "hotel_id",
+        name = "booking_id",
         nullable = false,
-        foreignKey = @ForeignKey(name = "fk_hotel_photo_hotel")
+        foreignKey = @ForeignKey(name = "fk_guest_booking")
     )
-    private Hotel hotel;
+    private Booking booking;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
+    private String fullName;
+
+    @Column
+    private Integer age;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Gender gender;
+
+    @Column
+    private String documentId;
+
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

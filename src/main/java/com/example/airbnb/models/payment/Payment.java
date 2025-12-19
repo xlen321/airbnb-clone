@@ -1,15 +1,13 @@
-package com.example.airbnb.models.booking;
+package com.example.airbnb.models.payment;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.example.airbnb.models.room.Room;
-import com.example.airbnb.models.user.User;
+import com.example.airbnb.models.booking.Booking;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,48 +27,40 @@ import lombok.Setter;
 
 @Entity
 @Table(
-    name = "bookings",
+    name = "payments",
     indexes = {
-        @Index(name = "idx_booking_room", columnList = "room_id"),
-        @Index(name = "idx_booking_user", columnList = "user_id"),
-        @Index(name = "idx_booking_dates", columnList = "check_in, check_out")
+        @Index(name = "idx_payment_booking", columnList = "booking_id"),
+        @Index(name = "idx_payment_status", columnList = "status")
     }
 )
 @Getter
 @Setter
-public class Booking {
+public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-        name = "room_id",
+        name = "booking_id",
         nullable = false,
-        foreignKey = @ForeignKey(name = "fk_booking_room")
+        foreignKey = @ForeignKey(name = "fk_payment_booking")
     )
-    private Room room;
+    private Booking booking;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(
-        name = "user_id",
-        nullable = false,
-        foreignKey = @ForeignKey(name = "fk_booking_user")
-    )
-    private User user;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private BookingStatus bookingStatus = BookingStatus.CONFIRMED;
+    private PaymentMethod method;
 
-    @Column(name = "check_in", nullable = false)
-    private LocalDate checkIn;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentStatus status = PaymentStatus.INITIATED;
 
-    @Column(name = "check_out", nullable = false)
-    private LocalDate checkOut;
-
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalPrice;
+    @Column(name = "gateway_reference")
+    private String gatewayReference;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
