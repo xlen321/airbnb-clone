@@ -48,11 +48,11 @@ Design decisions prioritize clarity, consistency, and real-world constraints ove
 
 ## 🛠 Technology Stack
 
-- Java 25  
-- Spring Boot  
-- Spring Data JPA (Hibernate)  
-- PostgreSQL  
-- Maven  
+- Java 25
+- Spring Boot
+- Spring Data JPA (Hibernate)
+- PostgreSQL
+- Maven
 
 ---
 
@@ -62,7 +62,9 @@ Design decisions prioritize clarity, consistency, and real-world constraints ove
      ├── models          # Domain & JPA entities
      ├── repositories    # Persistence layer
      ├── services        # Business logic
-     └── controllers     # REST APIs
+     ├── controllers     # REST APIs
+     ├── dtos            # API & internal DTOs
+     └── exceptions      # Domain exceptions & API error handling
 
 ---
 
@@ -104,6 +106,80 @@ The availability calendar acts as the single source of truth for bookings.
 
 ---
 
+## 🔌 API & DTO Design
+
+The system clearly separates external API contracts from internal domain workflows.
+
+## API DTOs
+- API DTOs define what clients are allowed to send and receive.
+- They are stable, validated, and independent of business rule enforcement.
+- Examples:
+    - Booking creation requests
+    - Guest add/update requests
+    - Read-only response models
+
+## Internal DTOs
+- Internal DTOs are used for communication between services and repositories.
+- They are stable, validated, and independent of business rule enforcement.
+- They represent intent-based domain operations and are used exclusively within the service layer.
+- Examples:
+    - Hotel read models
+    - Room read models
+    - Booking read models
+    - User read models
+
+- They enable:
+    - Explicit business rule enforcement
+    - Clear workflow orchestration
+    - Safe evolution of domain logic without breaking APIs
+
+
+## 🛑 Error Handling & API Contracts
+
+The system enforces business rules using **domain exceptions** and translates them into HTTP responses at the API boundary.
+
+### Domain Exceptions
+Business rules are enforced inside the service layer using explicit domain exceptions.
+
+These exceptions represent **what went wrong**, not how the error is exposed over HTTP.
+
+Examples include:
+- Booking not allowed due to lifecycle rules
+- Guest modification restrictions (e.g. within 24 hours of check-in)
+- Room availability conflicts
+- Unauthorized actions on bookings
+
+Domain exceptions are reusable across:
+- REST APIs
+- background jobs
+- future integrations
+
+---
+
+### Global Exception Handling
+All domain exceptions are translated into HTTP responses using a centralized global exception handler.
+
+This ensures:
+- Consistent error response format
+- Clear, machine-readable error codes
+- No business logic inside controllers
+- Stable API behavior as rules evolve
+
+---
+
+### Standard Error Response
+
+All API errors follow a uniform structure:
+
+```json
+{
+  "code": "BOOKING_NOT_ALLOWED",
+  "message": "Guest cannot be removed within 24 hours of check-in",
+  "timestamp": "2025-12-20T10:15:00Z"
+}
+```
+
+
 ## 📊 Project Progress
 
 ### ✅ Completed
@@ -117,6 +193,8 @@ The availability calendar acts as the single source of truth for bookings.
 - Guest modeling (booking-scoped stay participants)
 - Gender enum for guest details
 - Payment schema design (booking-linked, retry/refund ready)
+- API DTO and internal command separation
+- Domain exception modeling with centralized error handling
 - Clear separation of lifecycle vs availability concerns
 
 ### 🚧 In Progress
