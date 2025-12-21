@@ -16,102 +16,91 @@ import com.example.airbnb.exceptions.domain.UnauthorizedActionException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(BookingNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleBookingNotFound(
-            BookingNotFoundException ex) {
+        @ExceptionHandler(BookingNotFoundException.class)
+        public ResponseEntity<ApiErrorResponse> handleBookingNotFound(
+                        BookingNotFoundException ex) {
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(new ApiErrorResponse(
-                        "BOOKING_NOT_FOUND",
-                        ex.getMessage()
-                ));
-    }
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(new ApiErrorResponse(
+                                                "BOOKING_NOT_FOUND",
+                                                ex.getMessage()));
+        }
 
-    @ExceptionHandler(BookingNotAllowedException.class)
-    public ResponseEntity<ApiErrorResponse> handleBookingNotAllowed(
-            BookingNotAllowedException ex) {
+        @ExceptionHandler(BookingNotAllowedException.class)
+        public ResponseEntity<ApiErrorResponse> handleBookingNotAllowed(
+                        BookingNotAllowedException ex) {
 
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new ApiErrorResponse(
-                        "BOOKING_NOT_ALLOWED",
-                        ex.getMessage()
-                ));
-    }
+                return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body(new ApiErrorResponse(
+                                                "BOOKING_NOT_ALLOWED",
+                                                ex.getMessage()));
+        }
 
+        @ExceptionHandler(GuestNotFoundException.class)
+        public ResponseEntity<ApiErrorResponse> handleGuestNotFound(
+                        GuestNotFoundException ex) {
 
-    @ExceptionHandler(GuestNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleGuestNotFound(
-            GuestNotFoundException ex) {
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(new ApiErrorResponse(
+                                                "GUEST_NOT_FOUND",
+                                                ex.getMessage()));
+        }
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(new ApiErrorResponse(
-                        "GUEST_NOT_FOUND",
-                        ex.getMessage()
-                ));
-    }
+        @ExceptionHandler(GuestModificationException.class)
+        public ResponseEntity<ApiErrorResponse> handleGuestModification(
+                        GuestModificationException ex) {
 
-    @ExceptionHandler(GuestModificationException.class)
-    public ResponseEntity<ApiErrorResponse> handleGuestModification(
-            GuestModificationException ex) {
+                return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body(new ApiErrorResponse(
+                                                "GUEST_MODIFICATION_NOT_ALLOWED",
+                                                ex.getMessage()));
+        }
 
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new ApiErrorResponse(
-                        "GUEST_MODIFICATION_NOT_ALLOWED",
-                        ex.getMessage()
-                ));
-    }
+        @ExceptionHandler(RoomNotAvailableException.class)
+        public ResponseEntity<ApiErrorResponse> handleRoomUnavailable(
+                        RoomNotAvailableException ex) {
 
-    @ExceptionHandler(RoomNotAvailableException.class)
-    public ResponseEntity<ApiErrorResponse> handleRoomUnavailable(
-            RoomNotAvailableException ex) {
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(new ApiErrorResponse(
+                                                "ROOM_NOT_AVAILABLE",
+                                                ex.getMessage()));
+        }
 
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(new ApiErrorResponse(
-                        "ROOM_NOT_AVAILABLE",
-                        ex.getMessage()
-                ));
-    }
+        @ExceptionHandler(RoomNotFoundException.class)
+        public ResponseEntity<ApiErrorResponse> handleRoomNotFound(
+                        RoomNotFoundException ex) {
 
-    @ExceptionHandler(RoomNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleRoomNotFound(
-            RoomNotFoundException ex) {
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(new ApiErrorResponse(
+                                                "ROOM_NOT_FOUND",
+                                                ex.getMessage()));
+        }
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(new ApiErrorResponse(
-                        "ROOM_NOT_FOUND",
-                        ex.getMessage()
-                ));
-    }
+        @ExceptionHandler(UnauthorizedActionException.class)
+        public ResponseEntity<ApiErrorResponse> handleUnauthorized(
+                        UnauthorizedActionException ex) {
 
+                return ResponseEntity
+                                .status(HttpStatus.FORBIDDEN)
+                                .body(new ApiErrorResponse(
+                                                "UNAUTHORIZED_ACTION",
+                                                ex.getMessage()));
+        }
 
-    @ExceptionHandler(UnauthorizedActionException.class)
-    public ResponseEntity<ApiErrorResponse> handleUnauthorized(
-            UnauthorizedActionException ex) {
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<ApiErrorResponse> handleGenericException(
+                        Exception ex) {
 
-        return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
-                .body(new ApiErrorResponse(
-                        "UNAUTHORIZED_ACTION",
-                        ex.getMessage()
-                ));
-    }
-
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> handleGenericException(
-            Exception ex) {
-
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiErrorResponse(
-                        "INTERNAL_SERVER_ERROR",
-                        "Something went wrong"
-                ));
-    }
+                return ResponseEntity
+                                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .body(new ApiErrorResponse(
+                                                "INTERNAL_SERVER_ERROR",
+                                                "Something went wrong"));
+        }
 }
