@@ -2,13 +2,22 @@ package com.example.airbnb.dto.internal.booking;
 
 import java.util.UUID;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 public class CancelBookingCommand {
+    @NotNull
     private UUID bookingId;
+
+    @NotNull
     private UUID requestedBy;
+
+    @NotBlank
+    @Size(max = 255)
     private String reason;
 }

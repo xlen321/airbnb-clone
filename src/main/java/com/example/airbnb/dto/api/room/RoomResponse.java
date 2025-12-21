@@ -2,11 +2,11 @@ package com.example.airbnb.dto.api.room;
 
 import java.util.UUID;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
+@AllArgsConstructor
 public class RoomResponse {
     private UUID id;
     private String roomType;
